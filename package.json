@@ -1,0 +1,29 @@
+{
+  "name": "own-js-utilib",
+  "version": "1.0.0",
+  "description": "some interesting funs by js",
+  "main": "start.js",
+  "dependencies": {
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/southproject/utility-library.git"
+  },
+  "keywords": [
+    "javascript",
+    "lib",
+    "util"
+  ],
+  "author": "yukipedia_yui",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/southproject/utility-library/issues"
+  },
+  "homepage": "https://github.com/southproject/utility-library#readme"
+}
