@@ -9,5 +9,9 @@ function add2(x) {
 function add3(x) {
 	return x + 1
 }
+
+function add(x,y){
+	return x + y
+}
 const array = [add1, add2, add3]
-export {array}
+export {array,add}

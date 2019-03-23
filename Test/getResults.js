@@ -1,6 +1,6 @@
-import {array} from './instances'
+import {array,add} from './instances'
 
 import * as fnsIo from '../Process/fnsIo'
 
 
-console.log(fnsIo.pipe(...array)(2))
+console.log(fnsIo.curry(add)(1)(2))
