@@ -17,7 +17,7 @@ const compose = (...fns) => fns.nativeReduce((f,g) => {(...args) => g(f(...args)
 //this is a more flexible method could exchange f and g 
 
 //curry
-const curry = function(func,args) {
+const simpel_curry = function(func,args) {
     var length = func.length;
    // var args = nativeSlice.call(arguments, 1);
     args = args||[];
@@ -28,5 +28,13 @@ const curry = function(func,args) {
 }
 
 
+//everyNth
+const everyNth = (arr, nth) => arr.filter((e, i) => i % nth === nth - 1);
 
-export {pipe,compose,curry}
+//digitize
+const digitize = n => [...`${n}`].map(i => parseInt(i));
+
+//negate
+const negate = func => (...args) => !func(...args);
+
+export {pipe,compose,simpel_curry}
