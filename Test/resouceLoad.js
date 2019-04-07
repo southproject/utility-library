@@ -2,42 +2,43 @@
 //节流：某个时间内只执行一次操作，如果其间有时间触发会被忽略
 //防抖：以最后触发的事件为准，等待一段时间后执行，如果等待期间事件触发，延时
 //第三种需求：某段时间执行一次操作，以最该时间段内最后被触发的事件为准
-// 优化版： 定时器执行时，判断start time 是否向后推迟了，若是，设置延迟定时器
+
 var debounce = (fn, wait) => {
-	let timer, startTimeStamp=0;
-	let context, args;
- 
+	let timer, lastTimeStamp=0,startTimeStamp=0;
+  let context, args;
+  let first = true;
+ //2 1.5
 	let run = (timerInterval)=>{
-		timer= setTimeout(()=>{
-			let now = (new Date()).getTime();
-			let interval=now-startTimeStamp
-			if(interval<timerInterval){ // the timer start time has been reset, so the interval is less than timerInterval
-				console.log('debounce reset',timerInterval-interval);
-				startTimeStamp=now;
-				run(timerInterval-interval);  // reset timer for left time 
-			}else{
+		timer= setTimeout(()=>{	
+			
 				fn.apply(context,args);
 				clearTimeout(timer);
 				timer=null;
-			}
 			
-		},timerInterval);
+			
+		},timerInterval-startTimeStamp+lastTimeStamp);
 	}
  
 	return function(){
 		context=this;
-		args=arguments;
-		let now = (new Date()).getTime();
-		startTimeStamp=now;
- 
-		if(!timer){
-			console.log('debounce set',wait);
-			run(wait);    // last timer alreay executed, set a new timer
-		}
+		args=arguments;//这个地方决定参数的不同
+    let now = (new Date()).getTime();
+    if(first){
+      lastTimeStamp=startTimeStamp=now;
+    }
+    else{
+      lastTimeStamp=startTimeStamp;
+      startTimeStamp=now;
+    }
+    first=false;
+		//startTimeStamp=now;
+		run(wait);    // last timer alreay executed, set a new timer
+		
 		
 	}
  
 }
+
 
 
 function throttle1(fn, delay) {
