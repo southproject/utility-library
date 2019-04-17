@@ -181,7 +181,7 @@ const map = function (flow, transform) {
               done: item.done,
             }
           }
-          const newIter = { ...iterator, next: modifiedNext }
+          const newIter = { /* ...iterator, */ next: modifiedNext }
           return Lazy(newIter)
         }
       
@@ -194,7 +194,7 @@ const map = function (flow, transform) {
               }
             }
           }
-          const newIter = { ...iterator, next: modifiedNext }
+          const newIter = { /* ...iterator, */ next: modifiedNext }
           return Lazy(newIter)
         }
       
@@ -229,4 +229,68 @@ const map = function (flow, transform) {
       .takeWhile(x => x < 10000)
       .reduce((x, y) => x + y))
     // => 16650
+    console.log(numbers().next())
 //链式写法固然容易理解一个值依次执行了各项操作，但是能够不停调用next也是依靠闭包（上游中的函数modifynext传给下游）
+//take 和 takeWhile则是水阀，不断调用next取值
+//class implement
+
+/* class Lazy {
+  constructor(iterable, callback) {
+      this.iterable = iterable
+      this.callback = callback
+  }
+
+  filter(callback) {
+      return new LazyFilter(this, callback)
+  }
+
+  map(callback) {
+      return new LazyMap(this, callback)
+  }
+
+  next() {
+      return this.iterable.next()
+  }
+
+  take(n) {
+      const values = []
+      for (let i=0; i<n; i++) {
+          values.push(this.next().value)
+      }
+
+      return values
+  }
+}  
+
+class LazyFilter extends Lazy {
+  next() {
+      while (true) {
+          const item = this.iterable.next()
+
+          if (this.callback(item.value)) {
+              return item
+          }
+      }
+  }
+}
+
+class LazyMap extends Lazy {
+  next() {
+      const item = this.iterable.next()
+
+      const mappedValue = this.callback(item.value)
+      return { value: mappedValue, done: item.done }
+  }
+}
+
+let result = new Lazy(numbers()).map(num=>num*3).take(4).reduce((a,v) => a + v)
+console.log('result = ' + result)
+
+result = new Lazy(numbers()).filter(n=>n%2==0).take(4).reduce((a,v) => a + v)
+console.log('result = ' + result)
+
+result = new Lazy(numbers()).filter(n=>n%2==0).map(num=>num**2).take(4).reduce((a,v) => a + v)
+console.log('result = ' + result)
+
+result = new Lazy(numbers()).map(num=>num**2).filter(n=>n%2==0).take(4).reduce((a,v) => a + v)
+console.log('result = ' + result) */
