@@ -37,4 +37,8 @@ const digitize = n => [...`${n}`].map(i => parseInt(i));
 //negate
 const negate = func => (...args) => !func(...args);
 
-export {pipe,compose,simpel_curry}
+const foldl = {};
+
+const map_ = (arrs,fn)=>{arrs.reduce((acc,x)=>{Array.prototype.concat.call(acc,fn(x)),[]})}
+//[].contact(fn(a)) Function.prototype.concat.apply(acc,fn(x))
+export {pipe,compose,simpel_curry,map_}
