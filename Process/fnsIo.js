@@ -39,6 +39,8 @@ const negate = func => (...args) => !func(...args);
 
 const foldl = {};
 
-const map_ = (arrs,fn)=>{arrs.reduce((acc,x)=>{Array.prototype.concat.call(acc,fn(x)),[]})}
+
+const mapp = (arrs,fn)=>arrs.reduce((acc,x) => (acc.concat([fn(x)])),[])
 //[].contact(fn(a)) Function.prototype.concat.apply(acc,fn(x))
-export {pipe,compose,simpel_curry,map_}
+//cautious about return value of push、map、concat
+export {pipe,compose,simpel_curry,mapp}
