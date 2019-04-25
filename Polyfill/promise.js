@@ -92,6 +92,7 @@ class MyPromise {
   then(onFulfilled, onRejected) {
     // 返回一个新的Promise对象
     return new MyPromise((onFulfilledNext, onRejectedNext) => {
+        
       // 封装一个成功时执行的函数
       let fulfilled = value => {
         if (isFunction(onFulfilled)) {
@@ -207,3 +208,5 @@ new MyPromise(resolve => {
 }).then(num => { console.log(num) }).then(() => { console.log(6) });
 console.log(2)
 // 依次输出：1 2 4 3 5 6
+
+
