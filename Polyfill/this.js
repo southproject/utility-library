@@ -5,7 +5,7 @@ function New(func) {
     }
     var ret = func.apply(res, Array.prototype.slice.call(arguments, 1));
     if ((typeof ret === "object" || typeof ret === "function") && ret !== null) {
-        return ret;
+        return ret; //从这点可以看出，如果一个函数返回值是对象，那么该new的结果不是func的实例
     }
     return res;
 }
@@ -39,3 +39,14 @@ function jsonStringify(obj) {
 jsonStringify({x : 5}) // "{"x":5}"
 jsonStringify([1, "false", false]) // "[1,"false",false]"
 jsonStringify({b: undefined}) // "{"b":"undefined"}"
+
+
+function jsonParse(opt) {
+    return eval('(' + opt + ')');
+}
+jsonParse(jsonStringify({x : 5}))
+// Object { x: 5}
+jsonParse(jsonStringify([1, "false", false]))
+// [1, "false", falsr]
+jsonParse(jsonStringify({b: undefined}))
+// Object { b: "undefined"}

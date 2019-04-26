@@ -14,8 +14,9 @@ function callAsync(fn, arg, callback, onError) {
       onError(e)
     }
   })
-}
-
+}//需要考虑的是Promise的返回值（resolve部分）包裹在setTimeout（异步）中，导致传给下一个Promise的状态为pendinng,那么下一位Promise的resolve只能放入
+//上一个Promise的队列，即一者为pending后续必为pending。当异步中的resolve执行时，不仅改变状态，也从队列中取函数执行（包含下一个的promise的resolve）,那么
+//这个resolve也会改变自身状态并且取出下一个Promise的包含resolve的函数。如果后续的Promise的resolve包含在异步中，是同样的道理，它会卡住后续Promise状态变化，直到该异步执行
 // 判断变量否为function
 const isFunction = variable => typeof variable === 'function'
 // 定义Promise的三种状态常量
@@ -92,7 +93,7 @@ class MyPromise {
   then(onFulfilled, onRejected) {
     // 返回一个新的Promise对象
     return new MyPromise((onFulfilledNext, onRejectedNext) => {
-        
+
       // 封装一个成功时执行的函数
       let fulfilled = value => {
         if (isFunction(onFulfilled)) {
