@@ -109,7 +109,8 @@ class PubSub {
     publish(type, ...args) {
         let listeners = this.subscribers[type];
         if (!listeners || !listeners.length) return;
-        listeners.forEach(fn => fn(...args));        
+        listeners.forEach(fn => fn(...args));        //使用forEach 避免listeners[i]()这种订阅者中含有this操作
+                                                    //fn(){this.XXX}
     }
 }
 

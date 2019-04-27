@@ -50,3 +50,6 @@ jsonParse(jsonStringify([1, "false", false]))
 // [1, "false", falsr]
 jsonParse(jsonStringify({b: undefined}))
 // Object { b: "undefined"}
+
+var jsonStr = '{ "age": 20, "name": "jack" }'
+var json = (new Function('return ' + jsonStr))();
