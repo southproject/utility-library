@@ -53,3 +53,33 @@ jsonParse(jsonStringify({b: undefined}))
 
 var jsonStr = '{ "age": 20, "name": "jack" }'
 var json = (new Function('return ' + jsonStr))();
+
+Function.prototype.call2 = function(content = window) {
+    content = this;
+    let args = [...arguments].slice(1);
+    let result = content.fn(...args);
+    delete content;
+    return result;
+}
+var foo = {
+    value: 1
+}
+function bar(name, age) {
+    console.log(name)
+    console.log(age)
+    console.log(this.value);
+}
+bar.call2(foo, 'black', '18') // black 18 1
+
+Function.prototype.apply2 = function(context = window) {
+    context.fn = this
+    let result;
+    // 判断是否有第二个参数
+    if(arguments[1]) {
+        result = context.fn(...arguments[1])
+    } else {
+        result = context.fn()
+    }
+    delete context.fn()
+    return result
+}
