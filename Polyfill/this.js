@@ -101,3 +101,26 @@ Function.prototype.bind2 = function(content) {
 
     return resFn;
 }
+
+function multi() {
+    var args = Array.prototype.slice.call(arguments);
+    var fn = function() {
+        var newArgs = args.concat(Array.prototype.slice.call(arguments));
+        return multi.apply(this, newArgs);
+    }
+    fn.toString = function() {
+        return args.reduce(function(a, b) {
+            return a * b;
+        })
+    }
+    return fn;
+}
+function multiFn(a, b, c) {
+    return a * b * c;
+}
+var multi = curry(multiFn);
+
+multi(2)(3)(4);
+multi(2,3,4);
+multi(2)(3,4);
+multi(2,3)(4);
