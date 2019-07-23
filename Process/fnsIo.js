@@ -17,13 +17,13 @@ const compose = (...fns) => fns.nativeReduce((f,g) => {(...args) => g(f(...args)
 //this is a more flexible method could exchange f and g 
 
 //curry
-const simpel_curry = function(func,args) {
+const simple_curry = function(func,args) {
     var length = func.length;
    // var args = nativeSlice.call(arguments, 1);
     args = args||[];
     return function () {
         var newArgs = args.concat([].slice.call(arguments));
-        return newArgs.length < length?curry.call(this,func,newArgs):func.apply(this,newArgs)
+        return newArgs.length < length?simple_curry.call(this,func,newArgs):func.apply(this,newArgs)
     };
 }
 
@@ -43,7 +43,7 @@ const foldl = {};
 const mapp = (arrs,fn)=>arrs.reduce((acc,x) => (acc.concat([fn(x)])),[])
 //[].contact(fn(a)) Function.prototype.concat.apply(acc,fn(x))
 //cautious about return value of push、map、concat
-export {pipe,compose,simpel_curry,mapp}
+export {pipe,compose,simple_curry,mapp}
 
 
 const uncurry = (fn, n = 1) => (...args) => {
@@ -56,3 +56,66 @@ const uncurry = (fn, n = 1) => (...args) => {
   const add = x => y => z => x + y + z;
   const uncurriedAdd = uncurry(add, 3);
   uncurriedAdd(1, 2, 3); // 6
+
+
+  const deepMapKeys = (obj, f) =>
+  Array.isArray(obj)
+    ? obj.map(val => deepMapKeys(val, f))
+    : typeof obj === 'object'
+      ? Object.keys(obj).reduce((acc, current) => {
+        const val = obj[current];
+        acc[f(current)] =
+            val !== null && typeof val === 'object' ? deepMapKeys(val, f) : (acc[f(current)] = val);
+        return acc;
+      }, {})
+      : obj;
+
+      const obj = {
+        foo: '1',
+        nested: {
+          child: {
+            withArray: [
+              {
+                grandChild: ['hello']
+              }
+            ]
+          }
+        }
+      };
+      const upperKeysObj = deepMapKeys(obj, key => key.toUpperCase());
+      /*
+      {
+        "FOO":"1",
+        "NESTED":{
+          "CHILD":{
+            "WITHARRAY":[
+              {
+                "GRANDCHILD":[ 'hello' ]
+              }
+            ]
+          }
+        }
+      }
+      */
+      const reduceWhich = (arr, comparator = (a, b) => a - b) =>
+      arr.reduce((a, b) => (comparator(a, b) >= 0 ? b : a));
+
+      reduceWhich([1, 3, 2]); // 1
+      reduceWhich([1, 3, 2], (a, b) => b - a); // 3
+      reduceWhich(
+        [{ name: 'Tom', age: 12 }, { name: 'Jack', age: 18 }, { name: 'Lucy', age: 9 }],
+        (a, b) => a.age - b.age
+      ); // {name: "Lucy", age: 9}
+
+      const permutations = arr => {
+        if (arr.length <= 2) return arr.length === 2 ? [arr, [arr[1], arr[0]]] : arr;
+        return arr.reduce(
+          (acc, item, i) =>
+            acc.concat(
+              permutations([...arr.slice(0, i), ...arr.slice(i + 1)]).map(val => [item, ...val])
+            ),
+          []
+        );
+      };
+
+      permutations([1, 33, 5]); // [ [ 1, 33, 5 ], [ 1, 5, 33 ], [ 33, 1, 5 ], [ 33, 5, 1 ], [ 5, 1, 33 ], [ 5, 33, 1 ] ]
